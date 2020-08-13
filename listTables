@@ -1,0 +1,4 @@
+#! /usr/bin/bash
+
+echo "The database tables are: "
+ls ./databases/$1

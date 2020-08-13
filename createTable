@@ -1,0 +1,24 @@
+#! /usr/bin/bash
+
+echo "enter the name of the table"
+read table
+flag=$(. ./checkExistanceOfTable $1 $table)
+
+if [ "$flag" == 0 ]; then
+	echo "This table already exists"
+else 
+	touch ./databases/$1/$table
+	echo "how many columns are in the table"
+	read n
+	str=$n
+	for ((i=0;i< $n ;i++)){
+		echo "enter the name of the column"
+		read name
+                str+=",${name}"
+	}
+	table+=".meta"
+	table=".${table}"
+	touch ./databases/$1/$table
+	echo $str >> ./databases/$1/$table
+	echo "The table is created successfully"
+fi

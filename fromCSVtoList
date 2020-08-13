@@ -1,0 +1,15 @@
+#! /usr/bin/bash
+
+csvString=$1
+
+n=$(echo $csvString | cut -d',' -f 1)
+
+((n++))
+
+list=()
+for((i=2;i<=$n;i++)){
+   tmp=$(echo $csvString | cut -d',' -f $i)
+   list+=($tmp)
+}
+
+echo ${list[@]}

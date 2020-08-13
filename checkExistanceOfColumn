@@ -1,0 +1,27 @@
+#! /usr/bin/bash
+
+#haitb3t l database wl table wl col l ha-check 3aleh
+
+table=$2
+metaFile=".${table}.meta"
+metaData=$(tail ./databases/$1/$metaFile)
+
+listOfColumns=$(. ./fromCSVtoList $metaData)
+listOfColumns=($listOfColumns)
+
+returnValue=-1
+loopIterator=0
+
+
+for column in ${listOfColumns[@]};
+do
+
+	if [ "$column" == "$3" ]; then
+		returnValue=$loopIterator
+	fi
+((loopIterator++))
+
+
+done
+
+echo $returnValue

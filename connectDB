@@ -1,0 +1,55 @@
+#! /usr/bin/bash
+
+. ./ListDBs
+echo "Enter a database to connect to from the above databases"
+read db
+
+exitTablesMenu=0
+flag=$(. ./checkIfdbExists $db)
+
+if [ $flag == 0 ]; then
+    while true 
+    do 
+	select choice in "Create table" "List tables" "Drop table" "Insert into table" "select from table" "Delete from table" "update table" "Return to the Main Menu"
+
+	do
+	case $choice in 
+	"Create table") echo "Create table"
+			. ./createTable $db
+			break ;;
+	"List tables") echo "List tables"
+			. ./listTables $db
+			break ;;
+	"Drop table") echo "Drop table"
+			. ./dropTable $db
+			 break ;;
+	"Insert into table") echo "Insert into table"
+			 . ./insertinTable $db	
+			break ;;
+	"select from table" ) echo "select from table"
+			. ./selectFromTable $db
+			 break ;;
+	"Delete from table") echo "Delete from table"
+			. ./deleteFromTable $db
+			break ;;
+	"update table") echo "Update a record"
+			. ./updateRecord $db
+			break ;;
+	"Return to the Main Menu")
+		 echo "Return to the Main Menu"
+		exitTablesMenu=1		
+		break
+		;;
+	esac 
+	done
+   if [ $exitTablesMenu == 1 ]; then
+	break
+   fi
+  
+   done 
+else 
+	echo "database not found"
+fi
+
+
+. ./mainMenu

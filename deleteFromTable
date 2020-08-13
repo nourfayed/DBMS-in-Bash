@@ -1,0 +1,32 @@
+#! /usr/bin/bash
+
+
+echo "enter the table name"
+read table
+
+tableFile="./databases/$1/$table"
+while IFS= read -r record
+do
+	recordList=$(. ./fromCSVtoList $record)
+	echo $recordList
+done < "$tableFile"
+
+echo "choose one of the values of the first column to delete"
+read n
+
+rowNumber=0
+tableFile="./databases/$1/$table"
+while IFS= read -r record
+do
+	((rowNumber++))
+        recordList=$(. ./fromCSVtoList $record)
+        recordList=($recordList)
+	if [ "$n" == "${record[$0]}" ]; then
+		break
+	fi
+
+done < "$tableFile"
+
+
+sed -i "$rowNumber"'d' $tableFile 
+echo "Row deleted successfully"

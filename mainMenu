@@ -1,0 +1,33 @@
+#!/usr/bin/bash
+
+exitMenu=0
+while true
+do 
+select choice in "Create Database" "List Databases" "Connect to Database" "Drop Database" "Exit Menu"
+do 
+case $choice in
+"Create Database") echo "Create Database"
+		. ./CreateDB
+		break
+		;;
+"List Databases") echo "List all Databases"
+		. ./ListDBs
+		break
+		;;
+"Connect to Database") echo "Connect to Database"
+		. ./connectDB
+		break
+		;;
+"Drop Database") echo "Drop Database"
+		. ./dropDB
+		break
+		;;
+"Exit Menu") exitMenu=1 
+		 break
+		 ;;
+esac
+done
+if [ $exitMenu == 1 ]; then
+	break
+fi
+done

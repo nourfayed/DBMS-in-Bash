@@ -1,0 +1,12 @@
+#! /usr/bin/bash
+
+echo "enter the name of db you want to delete"
+read db
+flag=$(. ./checkIfdbExists $db)
+
+if [ $flag == 0 ]; then
+	rm -r databases/$db
+	echo "database deleted successfully"
+else
+	echo "database not found"
+fi

@@ -1,0 +1,58 @@
+#! /usr/bin/bash
+
+
+echo "enter the name of the table "
+read table
+
+echo "enter the column name"
+read column 
+
+echo "the value you want to select with "
+read value
+
+tableExists=$(. ./checkExistanceOfTable $1 $table)
+
+
+if [ "$tableExists" == 0 ];  then
+	columnExists=$(. ./checkExistanceOfColumn $1 $table $column)
+	if [ "$columnExists" == -1 ];
+	then
+		echo "This column does not exist."
+	else
+		recordList=()		
+		tableFile="./databases/$1/$table"
+		recordFound=0
+		while IFS= read -r record
+		do
+			recordList=$(. ./fromCSVtoList $record)
+			recordList=($recordList)
+			if [ "$value" == "${recordList[$columnExists]}" ]; then
+				recordFound=1
+				break
+			fi
+	
+		done < "$tableFile"
+		
+		if [ "$recordFound" == 1 ]; then
+			echo "-----------------------------"
+			echo "The selected row is "
+			echo "-----------------------------" 
+			metaFile=".${table}.meta"
+			metaData=$(tail ./databases/$1/$metaFile)
+	
+			listOfColumns=$(. ./fromCSVtoList $metaData)
+			listOfColumns=($listOfColumns)
+			echo ${listOfColumns[@]}
+			echo "-----------------------------"
+			echo ${recordList[@]} 
+		        echo "-----------------------------" 
+		else
+		echo "Value is not found "
+		fi
+	fi
+	
+else
+	echo "Table not found"
+
+fi
+

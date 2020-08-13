@@ -1,0 +1,14 @@
+#! /usr/bin/bash
+
+tables=$(ls ./databases/$1)
+
+flag=1
+
+for table in ${tables[@]};
+do
+    if [ "$table" = "$2" ]; then
+	flag=0
+    fi
+done
+
+echo $flag

@@ -1,0 +1,14 @@
+#! /usr/bin/bash 
+
+databases=$(ls ./databases)
+
+flag=1
+for db in ${databases[@]};
+do
+  if [ "$db" == "$1" ]; then
+	flag=0
+  fi
+done
+
+echo $flag
+

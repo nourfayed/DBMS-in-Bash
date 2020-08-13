@@ -1,0 +1,15 @@
+#! /usr/bin/bash
+
+echo "enter the table you want to drop"
+read table
+
+check=$(. ./checkExistanceOfTable $1 $table)
+
+if [ $check == 0 ]; then 
+	rm ./databases/$1/$table
+	echo "table dropped successfully"
+else
+	echo "This table does not exist"
+fi
+
+

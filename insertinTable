@@ -1,0 +1,31 @@
+#! /usr/bin/bash
+
+echo "enter the name of the table "
+read table
+
+tableExists=$(. ./checkExistanceOfTable $1 $table)
+
+
+if [ "$tableExists" == 0 ];  then
+    
+	metaFile=".${table}.meta"
+	metaData=$(tail ./databases/$1/$metaFile)
+	
+	listOfColumns=$(. ./fromCSVtoList $metaData)
+	listOfColumns=($listOfColumns)
+	
+	insertValues=${#listOfColumns[@]}
+	for column in ${listOfColumns[@]};
+	do
+		echo "enter the ${column}"
+		read value
+		insertValues+=",${value}"
+	done
+	
+	echo $insertValues >> ./databases/$1/$table
+	echo "Values are inserted successfully"
+	
+else
+	echo "Table not found"
+fi
+

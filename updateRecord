@@ -1,0 +1,61 @@
+#! /usr/bin/bash
+
+
+echo "enter the name of the table "
+read table
+
+echo "enter the column name"
+read column 
+
+echo "enter the old value"
+read oldValue
+
+echo "enter the new value"
+read newValue
+
+tableExists=$(. ./checkExistanceOfTable $1 $table)
+
+
+if [ "$tableExists" == 0 ];  then
+	columnExists=$(. ./checkExistanceOfColumn $1 $table $column)
+	if [ "$columnExists" == -1 ];
+	then
+		echo "This column does not exist."
+	else
+		recordList=()		
+		tableFile="./databases/$1/$table"
+		recordFound=0
+		recordNumber=0
+		while IFS= read -r record
+		do
+			((recordNumber++))
+			recordList=$(. ./fromCSVtoList $record)
+			recordList=($recordList)
+			if [ "$oldValue" == "${recordList[$columnExists]}" ]; then
+				recordFound=1
+				recordList[$columnExists]=$newValue
+				break
+			fi
+	
+		done < "$tableFile"
+		
+		if [ "$recordFound" == 1 ]; then
+			sed -i "$recordNumber"'d' $tableFile 
+			str=${#recordList[@]}
+			for value in "${recordList[@]}"
+			do
+				str+=",${value}"
+			done
+			echo $str >> ./databases/$1/$table
+			echo "value updated successfully"
+			
+		else
+		echo "Value is not found "
+		fi
+	fi
+	
+else
+	echo "Table not found"
+
+fi
+
